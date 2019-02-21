@@ -6,7 +6,7 @@ class Node {
   public var parent(default, set) : Node;
   public var x : Float;
   public var y : Float;
-  public var rotation : Float;
+  public var angle : Float;
 
   public function new(parent:Node) {
     this.children = new Array<Node>();

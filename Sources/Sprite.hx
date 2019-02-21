@@ -1,5 +1,5 @@
 import kha.Image;
-import kha.Color;
+import kha.math.FastMatrix3;
 import kha.graphics2.Graphics;
 
 class Sprite extends Node {
@@ -27,11 +27,16 @@ class Sprite extends Node {
 
 	override public function draw(g: Graphics): Void {
 		if (image != null && visible) {
-			g.color = Color.White;
+			if (angle != 0) 
+        g.pushTransformation(g.transformation
+          .multmat(FastMatrix3.translation(x + originX, y + originY))
+          .multmat(FastMatrix3.rotation(angle))
+          .multmat(FastMatrix3.translation(-x - originX, -y - originY))
+        );
       g.drawSubImage(image, x, y, sx, sy, width, height);
-			//if (angle != 0) g.pushTransformation(g.transformation.multmat(FastMatrix3.translation(x + originX, y + originY)).multmat(FastMatrix3.rotation(angle)).multmat(FastMatrix3.translation(-x - originX, -y - originY)));
+			if (angle != 0)
+        g.popTransformation();
 			//g.drawScaledSubImage(image, Std.int(animation.get() * w) % image.width, Math.floor(animation.get() * w / image.width) * h, w, h, Math.round(x - collider.x * scaleX), Math.round(y - collider.y * scaleY), width, height);
-			//if (angle != 0) g.popTransformation();
 		}
     super.draw(g);
   }

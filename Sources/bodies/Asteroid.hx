@@ -5,8 +5,6 @@ import box2D.collision.shapes.B2MassData;
 import box2D.dynamics.B2World;
 import box2D.collision.shapes.B2CircleShape;
 import box2D.dynamics.B2FixtureDef;
-import box2D.collision.shapes.B2PolygonShape;
-import box2D.dynamics.B2BodyDef;
 import box2D.common.math.B2Vec2;
 
 class Asteroid extends Body {

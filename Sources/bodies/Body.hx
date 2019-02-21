@@ -11,7 +11,6 @@ class Body extends Node {
 
   public var position(get, never) : B2Vec2;
   public var velocity(get, never) : B2Vec2;
-  public var angle(get, never) : Float;
 
   public function new(
     position: B2Vec2,
@@ -30,7 +29,7 @@ class Body extends Node {
   }
 
   override public function update(dt : Float, worldToScreen : B2Vec2 -> Array<Float>) {
-    rotation = -b2body.getAngle();
+    angle = -b2body.getAngle();
     var screenPos = worldToScreen(position);
     x = screenPos[0];
     y = screenPos[1];
@@ -46,9 +45,5 @@ class Body extends Node {
 
   public function get_velocity() {
     return b2body.getLinearVelocity();
-  }
-  
-  public function get_angle() {
-    return b2body.getAngle();
   }
 }

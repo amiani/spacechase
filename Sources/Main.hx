@@ -10,10 +10,10 @@ class Main {
   static var spacechase : Spacechase;
 
 	public static function main() {
-		System.start({title: "Project", width: width, height: height}, function (_) {
+		System.start({title: "Chase in Space", width: width, height: height}, function (_) {
 			// Just loading everything is ok for small projects
 			Assets.loadEverything(function () {
-				spacechase = new Spacechase();
+				spacechase = new Spacechase(width, height);
 				// Avoid passing update/render directly,
 				// so replacing them via code injection works
 				Scheduler.addTimeTask(function () { spacechase.update(); }, 0, 1 / 60);
