@@ -9,14 +9,17 @@ class Node {
   public var rotation : Float;
 
   public function new(parent:Node) {
+    this.children = new Array<Node>();
     this.parent = parent;
   }
 
-  public function set_parent(node:Node) {
-    var index = parent.children.indexOf(this);
-    if (index  != -1)
-      parent.children.splice(index, 1);
-    node.children.push(this);
+  public function set_parent(node:Node):Node {
+    if (parent != null) {
+      var index = parent.children.indexOf(this);
+      if (index != -1)
+        parent.children.splice(index, 1);
+    }
+    if (node != null) node.children.push(this);
     return parent = node;
   }
 

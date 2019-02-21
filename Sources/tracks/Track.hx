@@ -13,7 +13,7 @@ class Track extends Node {
 
   public function new(image : Image, position: B2Vec2, parent:Node) {
     super(parent);
-    this.mask = hxd.Res.testtrackmask.getPixels();
+    //this.mask = hxd.Res.testtrackmask.getPixels();
     this.position = position;
     this.image = image;
   }
@@ -22,7 +22,7 @@ class Track extends Node {
     var screenPos = worldToScreen(position);
     x = screenPos[0];
     y = screenPos[1];
-    super.update();
+    super.update(dt, worldToScreen);
   }
 
   override public function draw(g:Graphics) {

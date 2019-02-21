@@ -7,4 +7,5 @@ project.localLibraryPath = 'libs';
 project.addLibrary('box2d');
 project.addLibrary('Kha2D');
 
+//project.addParameter('-dce full');
 resolve(project);

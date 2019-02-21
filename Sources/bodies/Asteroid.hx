@@ -10,17 +10,20 @@ import box2D.dynamics.B2BodyDef;
 import box2D.common.math.B2Vec2;
 
 class Asteroid extends Body {
+  public var sprite(default, null) : Sprite;
+
   public function new(
     position : B2Vec2,
     parent: Node,
     world : B2World) {
       super(position, parent, world, DYNAMIC_BODY);
 
-      var asteroids = Assets.images.asteroids;
-      var asteroidTile = asteroids.sub(67, 16, 33, 33);
-      asteroidTile.dx = -Std.int(asteroidTile.width/2);
-      asteroidTile.dy = -Std.int(asteroidTile.height/2);
-      var asteroidSprite = new h2d.Bitmap(asteroidTile);
+      var width = 33;
+      var height = 33;
+      sprite = new Sprite(Assets.images.asteroids, width, height, 67, 16, this);
+      sprite.originX = -Std.int(width/2);
+      sprite.originY = -Std.int(height/2);
+      children.push(sprite);
 
       var shape = new B2CircleShape((33/2)/64);
       var fixtureDef = new B2FixtureDef();

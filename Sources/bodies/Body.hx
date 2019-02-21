@@ -40,10 +40,6 @@ class Body extends Node {
     super.update(dt, worldToScreen);
   }
 
-  override public function draw(g:Graphics) {
-    super.draw(g);
-  }
-  
   public function get_position() {
     return b2body.getPosition();
   }
