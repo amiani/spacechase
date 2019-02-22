@@ -1,6 +1,5 @@
 package tracks;
 
-import kha.graphics2.Graphics;
 import box2D.common.math.B2Vec2;
 import kha2d.Tile;
 import kha.Image;
@@ -10,23 +9,23 @@ class Track extends Node {
   //var mask : hxd.Pixels;
   public var position(default, null) : B2Vec2;
   public var image : Image;
+  var sprite : Sprite;
 
   public function new(image : Image, position: B2Vec2, parent:Node) {
     super(parent);
     //this.mask = hxd.Res.testtrackmask.getPixels();
     this.position = position;
     this.image = image;
+    sprite = new Sprite(image, image.width, image.height, 0, 0, 3.5, this);
   }
 
   override public function update(dt : Float, worldToScreen : B2Vec2 -> Array<Float>) {
     var screenPos = worldToScreen(position);
     x = screenPos[0];
     y = screenPos[1];
+    sprite.x = x;
+    sprite.y = y;
     super.update(dt, worldToScreen);
-  }
-
-  override public function draw(g:Graphics) {
-    super.draw(g);
   }
 
 /*

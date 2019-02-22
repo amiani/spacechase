@@ -11,14 +11,16 @@ class Sprite extends Node {
   public var sx(default, null) : Int;
   public var sy(default, null) : Int;
   var visible = true;
+  var scale : Float = 1;
 
-  public function new(image : Image, width: Int, height:Int, sx:Int=0, sy:Int=0, parent:Node) {
+  public function new(image : Image, width: Int, height:Int, sx:Int=0, sy:Int=0, scale:Float=1, parent:Node) {
     super(parent);
     this.image = image;
     this.width = width;
     this.height = height;
     this.sx = sx;
     this.sy = sy;
+    this.scale = scale;
   }
 
   override public function update(dt, worldToScreen) {
@@ -33,7 +35,9 @@ class Sprite extends Node {
           .multmat(FastMatrix3.rotation(angle))
           .multmat(FastMatrix3.translation(-x - originX, -y - originY))
         );
-      g.drawSubImage(image, x, y, sx, sy, width, height);
+      g.color = 0xffffffff;
+      //g.drawSubImage(image, x, y, sx, sy, width, height);
+      g.drawScaledSubImage(image, sx, sy, width, height, x, y, width*scale, height*scale);
 			if (angle != 0)
         g.popTransformation();
 			//g.drawScaledSubImage(image, Std.int(animation.get() * w) % image.width, Math.floor(animation.get() * w / image.width) * h, w, h, Math.round(x - collider.x * scaleX), Math.round(y - collider.y * scaleY), width, height);

@@ -4,16 +4,17 @@ import kha.Assets;
 import kha.Framebuffer;
 import box2D.dynamics.B2World;
 import box2D.common.math.B2Vec2;
+import tracks.Track;
 
 import bodies.*;
 
 class Spacechase {
   var TIMESTEP = 1/60;
-  var accumulator = 0.;
 
   var width : Int;
   var height : Int;
   var scene : Node;
+  var trackLayer : Node;
   var screen : Screen;
   var playerShip : Player;
   var asteroid : Asteroid;
@@ -33,21 +34,16 @@ class Spacechase {
     this.width = width;
     this.height = height;
     scene = new Node(null);
+    trackLayer = new Node(scene);
     world = new B2World(new B2Vec2(0, 0), true);
 
+    background = new Background(Assets.images.goldstartile, width, height);
     var playerStartPos = new B2Vec2(250,250);
+    screen = new Screen(playerStartPos, width, height);
     playerShip = new Player(playerStartPos, scene, world);
+    track = new Track(Assets.images.biglooptest, new B2Vec2(250, 250), trackLayer);
     asteroid = new Asteroid(new B2Vec2(260, 250), scene, world); 
     gate = new Gate(new B2Vec2(270, 250), scene, world);
-
-    screen = new Screen(playerStartPos, width, height);
-
-    background = new Background(Assets.images.goldstartile, width, height);
-
-    /*
-    track = new tracks.Track(hxd.Res.testtrack, new B2Vec2(250, 250));
-    s2d.add(track.bitmap, TRACKLAYER);
-    */
   }
 
 	public function update(): Void {
@@ -56,16 +52,14 @@ class Spacechase {
 
     scene.update(TIMESTEP, worldToScreen);
     screen.update(TIMESTEP, playerShip.position, playerShip.velocity);
+
     /*
     if (time >= checkTime) {
       track.checkOnTrack(playerShip.sprite.getBounds(track.bitmap));
       checkTime += .5;
     }
-    track.update(TIMESTEP, worldToScreen);
-
-    var backgroundPos = worldToScreen(new B2Vec2(250,250));
-    background.setPosition(backgroundPos[0], backgroundPos[1]);
     */
+    track.update(TIMESTEP, worldToScreen);
 	}
 
 	public function draw(frames: Array<Framebuffer>): Void {
@@ -77,7 +71,7 @@ class Spacechase {
 
     var g = frameBuffer.g2;
     g.begin();
-    background.draw(g, worldToScreen);
+    background.draw(g, width, height, worldToScreen);
     scene.draw(g);
     g.end();
 	}

@@ -1,6 +1,5 @@
 package bodies;
 
-import kha.graphics2.Graphics;
 import kha.input.KeyCode;
 import kha.Assets;
 import kha.input.Keyboard;
@@ -13,7 +12,6 @@ import box2D.common.math.B2Vec2;
 class Player extends Body {
   public var sprite : Sprite;
   //public var onTrack(default, null) : Bool;
-  //var exhaust : h2d.Particles;
   var keyboard : Keyboard;
   var gasDown = false;
   var boostDown = false;
@@ -40,14 +38,6 @@ class Player extends Body {
     massData.mass = 10;
     massData.I = 20/3;
     b2body.setMassData(massData);
-
-    /*
-    var box = new h2d.Graphics();
-    box.beginFill(0xee855e, .5);
-    box.drawRect(-32, -32, 64, 64);
-    box.endFill();
-    children.push(box);
-    */
 
     /*
     components.push(new components.TrailComponent(0xee855e01, new B2Vec2(-.14, -.5), parent));
@@ -92,18 +82,17 @@ class Player extends Body {
 
   override public function update(dt: Float, worldToScreen : B2Vec2 -> Array<Float>) {
     function velToForce(v : Float) return (-100/(v+1.5))+110;
-    function velToForceTrack(v : Float) return (-500/((v/7)+.01))+570;
+    function velToForceTrack(v : Float) return (-500/((v/7)+1))+570;
     var forceFunc = velToForce;
     if (boostDown) forceFunc = velToForceTrack;
     var massCenter = b2body.getWorldCenter();
     var velocity = b2body.getWorldVector(new B2Vec2(0,1));
-    if (gasDown) {
+    if (gasDown || boostDown) {
       velocity.multiply(forceFunc(b2body.getLinearVelocity().length()));
-      b2body.applyForce(velocity, massCenter);
     } else if (brakeDown) {
       velocity.multiply(-forceFunc(b2body.getLinearVelocity().length()));
-      b2body.applyForce(velocity, massCenter);
     }
+    b2body.applyForce(velocity, massCenter);
     if (leftDown) {
       b2body.applyTorque(40);
     } else if (rightDown) {
