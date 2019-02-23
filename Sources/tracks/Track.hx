@@ -1,11 +1,9 @@
 package tracks;
 
 import box2D.common.math.B2Vec2;
-import kha2d.Tile;
 import kha.Image;
 
 class Track extends Node {
-  var tile : Tile;
   //var mask : hxd.Pixels;
   public var position(default, null) : B2Vec2;
   public var image : Image;

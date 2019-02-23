@@ -2,6 +2,10 @@ package;
 
 import kha.Assets;
 import kha.Framebuffer;
+import kha.input.Keyboard;
+import kha.input.Mouse;
+import kha.input.KeyCode;
+
 import box2D.dynamics.B2World;
 import box2D.common.math.B2Vec2;
 import tracks.Track;
@@ -10,6 +14,9 @@ import bodies.*;
 
 class Spacechase {
   var TIMESTEP = 1/60;
+
+  var waiting : Bool;
+  var message : String = '';
 
   var width : Int;
   var height : Int;
@@ -45,7 +52,7 @@ class Spacechase {
     asteroid = new Asteroid(new B2Vec2(260, 250), scene, world); 
     gate = new Gate(new B2Vec2(270, 250), scene, world);
   }
-
+  
 	public function update(): Void {
     world.step(TIMESTEP, 8, 3);
     world.clearForces();
