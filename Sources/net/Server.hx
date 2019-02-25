@@ -1,10 +1,7 @@
 package net;
 
-import sys.net.UdpSocket;
-import sys.net.Host;
-
 class Server extends hxbit.NetworkHost {
-	var socket : UdpSocket;
+	var socket : Socket;
 
 	function close() {
 		if (socket != null) {
@@ -15,9 +12,8 @@ class Server extends hxbit.NetworkHost {
 
 	public function connect(host:String, port:Int) {
 		close();
-		socket = new UdpSocket();
+		socket = new Socket();
 		self = new Client(this, socket);
-		var host = new Host(host);
 		socket.connect(host, port);
 	}
 }

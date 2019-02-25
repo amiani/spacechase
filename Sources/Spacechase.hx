@@ -30,7 +30,9 @@ class Spacechase {
   var track : tracks.Track;
   var gate : Gate;
 
+  #if !js
   var Server : net.Server;
+  #end
 
   public static var BGLAYER = 0;
   public static var TRACKLAYER = 1;
