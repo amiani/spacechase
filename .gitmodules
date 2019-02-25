@@ -7,6 +7,3 @@
 [submodule "libs/box2d"]
 	path = libs/box2d
 	url = https://github.com/openfl/box2d.git
-[submodule "libs/libs/hxbit"]
-	path = libs/libs/hxbit
-	url = https://github.com/ncannasse/hxbit.git
