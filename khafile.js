@@ -5,6 +5,7 @@ project.addSources('Sources');
 
 project.localLibraryPath = 'libs';
 project.addLibrary('box2d');
+project.addLibrary('hxbit');
 //project.addLibrary('Kha2D');
 //project.addLibrary('box2d-linc');
 
