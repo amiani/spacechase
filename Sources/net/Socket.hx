@@ -1,6 +1,6 @@
 package net;
 
-import hx.concurrent.Thread;
+import hx.concurrent.thread.Threads;
 import sys.net.UdpSocket;
 import sys.net.Host;
 
@@ -14,6 +14,21 @@ class Socket {
 
 	public function connect(host:String, port:Int) {
 		var host = new Host(host);
-		s.connect(host, port);
+		try {
+			s.connect(host, port);
+		} catch(e:Dynamic) {
+			trace("couldn't connect!");
+		}
+	}
+	
+	function attend() {
+		while (true) {
+			s.waitForRead();
+			s.read();
+		}
+	}
+	
+	public function close() {
+		s.close();
 	}
 }
