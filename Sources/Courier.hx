@@ -3,9 +3,11 @@ import hx.concurrent.event.*;
 
 class Courier {
 	public static var instance(default, null) = new Courier();
-	var dispatcher : AsyncDispatcher;
+	var dispatcher : AsyncEventDispatcher;
 
 	private function new() {
-		dispatcher = new AsyncDispatcher<String>(Executor.create(2));
+		dispatcher = new AsyncEventDispatcher<String>(Executor.create(2));
 	}
+
+	public static function 
 }

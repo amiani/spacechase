@@ -1,13 +1,11 @@
 package bodies;
 
-import kha.netsync.Entity;
-import kha.netsync.EntityBuilder;
 import kha.graphics2.Graphics;
 import box2D.collision.shapes.B2MassData;
 import box2D.common.math.B2Vec2;
 import box2D.dynamics.*;
 
-class Body extends Node implements Entity {
+class Body extends Node {
   var b2body : B2Body;
   var components : Array<components.Component>;
 

@@ -1,7 +1,8 @@
 import kha.graphics2.Graphics;
 import box2D.common.math.B2Vec2;
+import hxbit.Serializable;
 
-class Node {
+class Node implements Serializable {
   public var children(default, null) : Array<Node>;
   public var parent(default, set) : Node;
   public var x : Float;
@@ -27,6 +28,7 @@ class Node {
     for (child in children) {
       child.update(dt, worldToScreen);
     }
+    Spacechase.scene.nodes.push(this);
   }
 
   public function draw(g:Graphics) {

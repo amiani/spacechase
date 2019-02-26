@@ -11,5 +11,5 @@ project.addLibrary('haxe-concurrent');
 //project.addLibrary('box2d-linc');
 
 //project.addParameter('-dce full');
-project.addDefine('net_client');
+project.addDefine('net_server');
 resolve(project);

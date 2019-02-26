@@ -16,6 +16,7 @@ class Socket {
 		var host = new Host(host);
 		try {
 			s.connect(host, port);
+			Threads.spawn(attend);
 		} catch(e:Dynamic) {
 			trace("couldn't connect!");
 		}

@@ -12,6 +12,10 @@ import tracks.Track;
 
 import bodies.*;
 
+#if net_client
+import sys.net.Host;
+#end
+
 class Spacechase {
   var TIMESTEP = 1/60;
 
@@ -20,7 +24,6 @@ class Spacechase {
 
   var width : Int;
   var height : Int;
-  var scene : Node;
   var trackLayer : Node;
   var screen : Screen;
   var playerShip : Player;
@@ -30,8 +33,12 @@ class Spacechase {
   var track : tracks.Track;
   var gate : Gate;
 
-  #if !js
-  var Server : net.Server;
+  #if net_server
+  var server = new net.Server();
+  var serializer = new hxbit.Serializer();
+  #end
+  #if net_client
+  var client : Client;
   #end
 
   public static var BGLAYER = 0;
@@ -39,12 +46,12 @@ class Spacechase {
   public static var TRAILLAYER = 2;
   public static var BODYLAYER = 3;
 
+  public static var scene = new Scene();
   var time = 0.;
 
   public function new(width:Int, height:Int) {
     this.width = width;
     this.height = height;
-    scene = new Node(null);
     trackLayer = new Node(scene);
     world = new B2World(new B2Vec2(0, 0), true);
 
@@ -55,9 +62,17 @@ class Spacechase {
     track = new Track(Assets.images.biglooptest, new B2Vec2(250, 250), trackLayer);
     asteroid = new Asteroid(new B2Vec2(260, 250), scene, world); 
     gate = new Gate(new B2Vec2(270, 250), scene, world);
+    #if net_client
+    client = new Client(new UdpSocket(), new Host('localhost'), 9090);
+    #end
   }
   
 	public function update(): Void {
+    #if net_client
+    if (time % 60 == 0) {
+      client.sendMessage('hello');
+    }
+    #end
     world.step(TIMESTEP, 8, 3);
     world.clearForces();
 
@@ -71,6 +86,11 @@ class Spacechase {
     }
     */
     track.update(TIMESTEP, worldToScreen);
+
+    #if net_server
+    server.sendState(serializer.serialize(scene));
+    #end
+    time++;
 	}
 
 	public function draw(frames: Array<Framebuffer>): Void {

@@ -17,7 +17,9 @@ class Main {
 				// Avoid passing update/render directly,
 				// so replacing them via code injection works
 				Scheduler.addTimeTask(function () { spacechase.update(); }, 0, 1 / 60);
+				#if !net_server
 				System.notifyOnFrames(function (frames) { spacechase.draw(frames); });
+				#end
 			});
 		});
 	}
