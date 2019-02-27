@@ -6,7 +6,7 @@
 	url = https://github.com/ncannasse/hxbit.git
 [submodule "libs/box2d"]
 	path = libs/box2d
-	url = https://github.com/openfl/box2d.git
+	url = https://github.com/amiani/box2d.git
 [submodule "libs/haxe-concurrent"]
 	path = libs/haxe-concurrent
 	url = https://github.com/vegardit/haxe-concurrent.git

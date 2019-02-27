@@ -1,3 +1,4 @@
+import hxbit.Serializer;
 import kha.graphics2.Graphics;
 import box2D.common.math.B2Vec2;
 import hxbit.Serializable;
@@ -8,8 +9,8 @@ class Node implements Serializable {
   public var children(default, null) : Array<Node>;
   public var parent(default, set) : Node;
 
-  @:s @:isVar public var position(get, set) : B2Vec2;
-  @:s @:isVar public var linearVelocity(get, set) : B2Vec2;
+  @:isVar public var position(get, set) : B2Vec2;
+  @:isVar public var linearVelocity(get, set) : B2Vec2;
   @:s @:isVar public var angularVelocity(get, set) : Float;
   @:s @:isVar public var angle(get, set) : Float;
   public var x : Float;
@@ -101,5 +102,19 @@ class Node implements Serializable {
     if (position == null || linearVelocity == null || av == null || an == null)
       return false;
     return true;
+  }
+
+  @:keep
+  public function customSerialize(ctx:Serializer) {
+    ctx.addFloat(position.x);
+    ctx.addFloat(position.y);
+    ctx.addFloat(linearVelocity.x);
+    ctx.addFloat(linearVelocity.y);
+  }
+
+  @:keep
+  public function customUnserialize(ctx:Serializer) {
+    position = new B2Vec2(ctx.getFloat(), ctx.getFloat());
+    linearVelocity = new B2Vec2(ctx.getFloat(), ctx.getFloat());
   }
 }

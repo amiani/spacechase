@@ -38,7 +38,10 @@ class Body extends Node {
   }
 
   override function get_position() {
-    return b2body.getPosition();
+    if (b2body == null)
+      return super.get_position();
+    else
+      return b2body.getPosition();
   }
   override function set_position(p:B2Vec2):B2Vec2 {
     if (b2body == null)
@@ -49,7 +52,10 @@ class Body extends Node {
   }
 
   override function get_linearVelocity() {
-    return b2body.getLinearVelocity();
+    if (b2body == null)
+      return super.get_linearVelocity();
+    else
+      return b2body.getLinearVelocity();
   }
   override function set_linearVelocity(v:B2Vec2):B2Vec2 {
     if (b2body == null)
@@ -60,7 +66,10 @@ class Body extends Node {
   }
 
   override function get_angularVelocity() {
-    return b2body.getAngularVelocity();
+    if (b2body == null)
+      return super.get_angularVelocity();
+    else
+      return b2body.getAngularVelocity();
   }
   override function set_angularVelocity(o:Float) {
     if (b2body == null)
@@ -71,7 +80,10 @@ class Body extends Node {
   }
 
   override function get_angle() {
-    return b2body.getAngle();
+    if (b2body == null)
+      return super.get_angle();
+    else
+      return b2body.getAngle();
   }
   override function set_angle(a:Float) {
     if (b2body == null)
