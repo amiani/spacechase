@@ -13,4 +13,8 @@ class Scene extends Node {
       child.update(dt, worldToScreen);
     }
   }
+
+	public function reset() {
+		nodes = new Array<Node>();
+	}
 }
