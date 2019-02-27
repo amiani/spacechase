@@ -28,9 +28,6 @@ class Body extends Node {
   override function initPhysicalVariables() {}
 
   override public function update(dt : Float, worldToScreen : B2Vec2 -> Array<Float>) {
-    var screenPos = worldToScreen(position);
-    x = screenPos[0];
-    y = screenPos[1];
     for (c in components) {
       c.update(this, worldToScreen);
     }
@@ -40,8 +37,9 @@ class Body extends Node {
   override function get_position() {
     if (b2body == null)
       return super.get_position();
-    else
+    else {
       return b2body.getPosition();
+    }
   }
   override function set_position(p:B2Vec2):B2Vec2 {
     if (b2body == null)

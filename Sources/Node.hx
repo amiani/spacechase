@@ -47,6 +47,9 @@ class Node implements Serializable {
   }
 
   public function update(dt:Float, worldToScreen:B2Vec2->Array<Float>) {
+    var screenPosition = worldToScreen(position);
+    x = screenPosition[0];
+    y = screenPosition[1];
     for (child in children) {
       child.update(dt, worldToScreen);
     }
