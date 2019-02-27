@@ -1,4 +1,5 @@
 import box2D.common.math.B2Vec2;
+import net.StateUpdate;
 
 class Scene extends Node {
 	public var nodes(default, null) : Array<Node>;
@@ -23,5 +24,12 @@ class Scene extends Node {
 		var updateNodes = nodes.slice(0, 100);
 		for (n in updateNodes) n.resetAccumulatedPriority();
 		return new StateUpdate(frame, updateNodes);
+	}
+
+	public function applyStateUpdate(stateUpdate:StateUpdate) {
+		trace('applying state update');
+		for (node in stateUpdate.nodes) {
+			//trace(node.id);
+		}
 	}
 }

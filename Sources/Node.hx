@@ -3,6 +3,8 @@ import box2D.common.math.B2Vec2;
 import hxbit.Serializable;
 
 class Node implements Serializable {
+  static var lastId = 0;
+  @:s public var id(default, null) : Int;
   public var children(default, null) : Array<Node>;
   public var parent(default, set) : Node;
   public var x : Float;
@@ -12,6 +14,7 @@ class Node implements Serializable {
   public var accumulatedPriority(default, null) : Int;
 
   public function new(parent:Node, ?priority: Int) {
+    this.id = ++lastId;
     this.children = new Array<Node>();
     this.parent = parent;
     this.priority = priority == null ? 1 : priority;

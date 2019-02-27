@@ -18,6 +18,7 @@ class Server {
 	var serializer : hxbit.Serializer;
 
 	public function new() {
+		serializer = new hxbit.Serializer();
 		socket = new UdpSocket();
 		socket.setBlocking(false);
 		clients = new Array<Client>();

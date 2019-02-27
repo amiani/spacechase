@@ -1,5 +1,6 @@
 package net;
 
+import hx.concurrent.collection.Queue;
 #if !js
 import sys.net.UdpSocket;
 import sys.net.Host;
@@ -24,22 +25,19 @@ class Client {
 	public static inline var INPUT = 4;
 	public static inline var MSG = 5;
 	public var connectionState(default, null) = Disconnected;
+  public var latestNetFrame(default, null) = -1;
+	public var updateBuffer(default, null) : Queue<net.StateUpdate>;
 	var socket : UdpSocket;
 	public var address(default, null) = new Address();
 	var host : Host;
 	var connectTimer : haxe.Timer;
 	var serializer = new hxbit.Serializer();
 
-	public function new(
-		socket:UdpSocket,
-		host:Host,
-		port:Int,
-		?connectionState:ConnectionState,
-		?updateBuffer:Queue<StateUpdate>
-	) {
+	public function new(socket:UdpSocket, host:Host, port:Int, ?connectionState:ConnectionState) {
 		this.socket = socket;
 		this.host = host;
 		this.connectionState = connectionState == null ? Disconnected : connectionState;
+		this.updateBuffer = new Queue<StateUpdate>();
 		address.host = host.ip;
 		address.port = port;
 	}
@@ -93,9 +91,9 @@ class Client {
 	
 	function handleState(data:Bytes) {
 		var stateUpdate = serializer.unserialize(data, StateUpdate);
-		if (stateUpdate.frame > Spacechase.latestStateUpdateFrame) {
+		if (stateUpdate.frame > latestNetFrame) {
 			updateBuffer.push(stateUpdate);
-			Spacechase.latestStateUpdateFrame = stateUpdate.frame;
+			latestNetFrame = stateUpdate.frame;
 		}
 	}
 
