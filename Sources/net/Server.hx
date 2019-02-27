@@ -15,6 +15,7 @@ class Server {
 	var maxClients = 20;
 	var host : Host;
 	var port : Int;
+	var serializer : hxbit.Serializer;
 
 	public function new() {
 		socket = new UdpSocket();
@@ -83,9 +84,10 @@ class Server {
 		return -1;
 	}
 
-	public function sendState(snapshots) {
+	public function sendState(stateUpdate:StateUpdate) {
+		var b = serializer.serialize(stateUpdate);
 		for (c in clients) {
-			c.sendState(snapshots);
+			c.sendState(b);
 		}
 	}
 

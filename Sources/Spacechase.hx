@@ -15,6 +15,7 @@ import bodies.*;
 #if (net_client && !js)
 import sys.net.Host;
 import sys.net.UdpSocket;
+import hx.concurrent.collection.Queue;
 #end
 
 class Spacechase {
@@ -41,6 +42,8 @@ class Spacechase {
   #end
   #if net_client
   var client : net.Client;
+  var updateBuffer : Queue;
+  public static var latestStateUpdate = -1;
   #end
   #end
 
@@ -66,15 +69,17 @@ class Spacechase {
     asteroid = new Asteroid(new B2Vec2(260, 250), scene, world); 
     gate = new Gate(new B2Vec2(270, 250), scene, world);
     #if (!js && net_client)
+    updateBuffer = new Queue<net.StateUpdate>();
     var socket = new UdpSocket();
     socket.setBlocking(false);
-    client = new net.Client(socket, new Host('localhost'), 9090);
+    client = new net.Client(socket, new Host('localhost'), 9090, updateBuffer);
     client.connect();
     #end
   }
   
 	public function update(): Void {
     #if net_client
+    var stateUpdate = updateBuffer.pop();
     #end
     world.step(TIMESTEP, 8, 3);
     world.clearForces();
@@ -91,9 +96,7 @@ class Spacechase {
     track.update(TIMESTEP, worldToScreen);
 
     #if net_server
-    var b = serializer.serialize(scene);
-    server.sendState(b);
-    scene.reset();
+    server.sendState(scene.getStateUpdate(frame));
     #end
     time++;
 	}

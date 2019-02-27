@@ -1,7 +1,7 @@
 import box2D.common.math.B2Vec2;
 
 class Scene extends Node {
-	@:s public var nodes(default, null) : Array<Node>;
+	public var nodes(default, null) : Array<Node>;
 	
 	public function new() {
 		super(null);
@@ -16,5 +16,12 @@ class Scene extends Node {
 
 	public function reset() {
 		nodes = new Array<Node>();
+	}
+
+	public function getStateUpdate(frame:Int) {
+		nodes.sort((a, b) -> a.accumulatedPriority - b.accumulatedPriority);
+		var updateNodes = nodes.slice(0, 100);
+		for (n in updateNodes) n.resetAccumulatedPriority();
+		return new StateUpdate(frame, updateNodes);
 	}
 }

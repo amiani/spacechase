@@ -5,6 +5,7 @@ import sys.net.UdpSocket;
 import sys.net.Host;
 import sys.net.Address;
 import hx.concurrent.thread.Threads;
+import hx.concurrent.collection.Queue;
 #end
 import haxe.io.Bytes;
 import haxe.io.BytesBuffer;
@@ -19,7 +20,7 @@ class Client {
 	public static inline var CONNECT = 0;
 	public static inline var ACCEPTED = 1;
 	public static inline var DENIED = 2;
-	public static inline var STATE = 3;
+	public static inline var STATEUPDATE = 3;
 	public static inline var INPUT = 4;
 	public static inline var MSG = 5;
 	public var connectionState(default, null) = Disconnected;
@@ -27,8 +28,15 @@ class Client {
 	public var address(default, null) = new Address();
 	var host : Host;
 	var connectTimer : haxe.Timer;
+	var serializer = new hxbit.Serializer();
 
-	public function new(socket:UdpSocket, host:Host, port:Int, ?connectionState:ConnectionState) {
+	public function new(
+		socket:UdpSocket,
+		host:Host,
+		port:Int,
+		?connectionState:ConnectionState,
+		?updateBuffer:Queue<StateUpdate>
+	) {
 		this.socket = socket;
 		this.host = host;
 		this.connectionState = connectionState == null ? Disconnected : connectionState;
@@ -61,7 +69,7 @@ class Client {
 					handleAccepted();
 				case Client.DENIED:
 					handleDenied();
-				case Client.STATE:
+				case Client.STATEUPDATE:
 					handleState(data.sub(1, len-1));
 			}
 		}
@@ -84,7 +92,11 @@ class Client {
 	}
 	
 	function handleState(data:Bytes) {
-
+		var stateUpdate = serializer.unserialize(data, StateUpdate);
+		if (stateUpdate.frame > Spacechase.latestStateUpdateFrame) {
+			updateBuffer.push(stateUpdate);
+			Spacechase.latestStateUpdateFrame = stateUpdate.frame;
+		}
 	}
 
 	public function sendInput(input) {
@@ -107,7 +119,7 @@ class Client {
 
 	public function sendState(snapshots) {
 		var buf = new BytesBuffer();
-		buf.addByte(STATE);
+		buf.addByte(STATEUPDATE);
 		buf.add(snapshots);
 		var out = buf.getBytes();
 		send(out);

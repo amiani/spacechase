@@ -8,10 +8,14 @@ class Node implements Serializable {
   public var x : Float;
   public var y : Float;
   public var angle : Float;
+  public var priority(default, null) : Int;
+  public var accumulatedPriority(default, null) : Int;
 
-  public function new(parent:Node) {
+  public function new(parent:Node, ?priority: Int) {
     this.children = new Array<Node>();
     this.parent = parent;
+    this.priority = priority == null ? 1 : priority;
+    this.accumulatedPriority = priority;
   }
 
   public function set_parent(node:Node):Node {
@@ -28,12 +32,16 @@ class Node implements Serializable {
     for (child in children) {
       child.update(dt, worldToScreen);
     }
-    Spacechase.scene.nodes.push(this);
+    accumulatedPriority += priority;
   }
 
   public function draw(g:Graphics) {
     for (child in children) {
       child.draw(g);
     }
+  }
+
+  public inline function resetAccumulatedPriority() {
+    accumulatedPriority = priority;
   }
 }
