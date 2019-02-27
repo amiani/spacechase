@@ -109,7 +109,7 @@ class Player extends Body {
     b2body.applyImpulse(impulse, massCenter);
     sprite.x = x;
     sprite.y = y;
-    sprite.angle = angle;
+    sprite.angle = -angle;
 
     super.update(dt, worldToScreen);
   }

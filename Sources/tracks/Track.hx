@@ -5,7 +5,6 @@ import kha.Image;
 
 class Track extends Node {
   //var mask : hxd.Pixels;
-  public var position(default, null) : B2Vec2;
   public var image : Image;
   var sprite : Sprite;
 

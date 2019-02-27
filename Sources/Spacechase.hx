@@ -41,7 +41,6 @@ class Spacechase {
   #end
   #if net_client
   var client : net.Client;
-  var updateBuffer : Queue<net.StateUpdate>;
   #end
   #end
 
@@ -50,10 +49,13 @@ class Spacechase {
   public static var TRAILLAYER = 2;
   public static var BODYLAYER = 3;
 
-  public static var scene = new Scene();
+  var scene : Scene;
+  public static var activeScene(default, null) : Scene;
   var frame = 0;
 
   public function new(width:Int, height:Int) {
+    scene = new Scene();
+    activeScene = scene;
     this.width = width;
     this.height = height;
     trackLayer = new Node(scene);
@@ -67,23 +69,23 @@ class Spacechase {
     asteroid = new Asteroid(new B2Vec2(260, 250), scene, world); 
     gate = new Gate(new B2Vec2(270, 250), scene, world);
 
-    #if (!js && net_client)
+    #if !js
+    #if net_client
     var socket = new UdpSocket();
     socket.setBlocking(false);
     client = new net.Client(socket, new Host('localhost'), 9090);
     client.connect();
     #end
-    trace('made spacechase');
+    #end
   }
   
 	public function update(): Void {
-    trace('update');
     #if (!js && net_client)
     var stateUpdate = client.updateBuffer.pop();
     if (stateUpdate != null) scene.applyStateUpdate(stateUpdate);
     #end
     scene.update(TIMESTEP, worldToScreen);
-    screen.update(TIMESTEP, playerShip.position, playerShip.velocity);
+    screen.update(TIMESTEP, playerShip.position, playerShip.linearVelocity);
 
     world.step(TIMESTEP, 8, 3);
     world.clearForces();
@@ -99,7 +101,6 @@ class Spacechase {
     server.sendState(scene.getStateUpdate(frame));
     #end
     frame++;
-    trace('ended update');
 	}
 
 	public function draw(frames: Array<Framebuffer>): Void {

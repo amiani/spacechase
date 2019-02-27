@@ -7,9 +7,14 @@ class Node implements Serializable {
   @:s public var id(default, null) : Int;
   public var children(default, null) : Array<Node>;
   public var parent(default, set) : Node;
+
+  @:s @:isVar public var position(get, set) : B2Vec2;
+  @:s @:isVar public var linearVelocity(get, set) : B2Vec2;
+  @:s @:isVar public var angularVelocity(get, set) : Float;
+  @:s @:isVar public var angle(get, set) : Float;
   public var x : Float;
   public var y : Float;
-  public var angle : Float;
+
   public var priority(default, null) : Int;
   public var accumulatedPriority(default, null) : Int;
 
@@ -19,6 +24,15 @@ class Node implements Serializable {
     this.parent = parent;
     this.priority = priority == null ? 1 : priority;
     this.accumulatedPriority = priority;
+    initPhysicalVariables();
+    if (parent != null) Spacechase.activeScene.addNode(this);
+  }
+
+  function initPhysicalVariables() {
+    position = new B2Vec2();
+    linearVelocity = new B2Vec2();
+    angularVelocity = 0;
+    angle = 0;
   }
 
   public function set_parent(node:Node):Node {
@@ -36,6 +50,7 @@ class Node implements Serializable {
       child.update(dt, worldToScreen);
     }
     accumulatedPriority += priority;
+    Spacechase.activeScene.maxNodes.push(this);
   }
 
   public function draw(g:Graphics) {
@@ -43,8 +58,48 @@ class Node implements Serializable {
       child.draw(g);
     }
   }
+  
+  public function applyState(node:Node) {
+    return;
+  }
 
   public inline function resetAccumulatedPriority() {
     accumulatedPriority = priority;
+  }
+
+  public function get_position() {
+    return position;
+  }
+  function set_position(p:B2Vec2) {
+    return position = p;
+  }
+
+  public function get_linearVelocity() {
+    return linearVelocity;
+  }
+  function set_linearVelocity(v:B2Vec2) {
+    return linearVelocity = v;
+  }
+
+  function get_angularVelocity() {
+    return angularVelocity;
+  }
+  function set_angularVelocity(o:Float) {
+    return angularVelocity = o;
+  }
+
+  function get_angle() {
+    return angle;
+  }
+  function set_angle(a:Float) {
+    return angle = a;
+  }
+
+  public function check():Bool {
+    var av :Null<Float> = angularVelocity;
+    var an : Null<Float> = angle;
+    if (position == null || linearVelocity == null || av == null || an == null)
+      return false;
+    return true;
   }
 }

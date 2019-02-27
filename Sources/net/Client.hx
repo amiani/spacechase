@@ -90,6 +90,7 @@ class Client {
 	}
 	
 	function handleState(data:Bytes) {
+		//trace('handleState');
 		var stateUpdate = serializer.unserialize(data, StateUpdate);
 		if (stateUpdate.frame > latestNetFrame) {
 			updateBuffer.push(stateUpdate);
@@ -115,10 +116,10 @@ class Client {
 		send(out);
 	}
 
-	public function sendState(snapshots) {
+	public function sendState(stateUpdate) {
 		var buf = new BytesBuffer();
 		buf.addByte(STATEUPDATE);
-		buf.add(snapshots);
+		buf.add(stateUpdate);
 		var out = buf.getBytes();
 		send(out);
 	}

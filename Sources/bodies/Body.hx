@@ -9,9 +9,6 @@ class Body extends Node {
   var b2body : B2Body;
   var components : Array<components.Component>;
 
-  public var position(get, never) : B2Vec2;
-  public var velocity(get, never) : B2Vec2;
-
   public function new(
     position: B2Vec2,
     parent: Node,
@@ -28,8 +25,9 @@ class Body extends Node {
     components = new Array<components.Component>();
   }
 
+  override function initPhysicalVariables() {}
+
   override public function update(dt : Float, worldToScreen : B2Vec2 -> Array<Float>) {
-    angle = -b2body.getAngle();
     var screenPos = worldToScreen(position);
     x = screenPos[0];
     y = screenPos[1];
@@ -39,11 +37,47 @@ class Body extends Node {
     super.update(dt, worldToScreen);
   }
 
-  public function get_position() {
+  override function get_position() {
     return b2body.getPosition();
   }
+  override function set_position(p:B2Vec2):B2Vec2 {
+    if (b2body == null)
+      super.set_position(p);
+    else
+      b2body.setPosition(p);
+    return p;
+  }
 
-  public function get_velocity() {
+  override function get_linearVelocity() {
     return b2body.getLinearVelocity();
+  }
+  override function set_linearVelocity(v:B2Vec2):B2Vec2 {
+    if (b2body == null)
+      super.set_linearVelocity(v);
+    else
+      b2body.setLinearVelocity(v);
+    return v;
+  }
+
+  override function get_angularVelocity() {
+    return b2body.getAngularVelocity();
+  }
+  override function set_angularVelocity(o:Float) {
+    if (b2body == null)
+      super.set_angularVelocity(o);
+    else
+      b2body.setAngularVelocity(o);
+    return o;
+  }
+
+  override function get_angle() {
+    return b2body.getAngle();
+  }
+  override function set_angle(a:Float) {
+    if (b2body == null)
+      super.set_angle(a);
+    else
+      b2body.setAngle(a);
+    return a;
   }
 }
