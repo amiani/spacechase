@@ -1,6 +1,5 @@
 package net;
 
-import hx.concurrent.collection.Queue;
 #if !js
 import sys.net.UdpSocket;
 import sys.net.Host;
@@ -24,12 +23,13 @@ class Client {
 	public static inline var STATEUPDATE = 3;
 	public static inline var INPUT = 4;
 	public static inline var MSG = 5;
+
+	var socket : UdpSocket;
+	var host : Host;
 	public var connectionState(default, null) = Disconnected;
   public var latestNetFrame(default, null) = -1;
-	public var updateBuffer(default, null) : Queue<net.StateUpdate>;
-	var socket : UdpSocket;
+	public var updateBuffer(default, null) : Queue<StateUpdate>;
 	public var address(default, null) = new Address();
-	var host : Host;
 	var connectTimer : haxe.Timer;
 	var serializer = new hxbit.Serializer();
 

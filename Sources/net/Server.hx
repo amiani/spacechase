@@ -10,22 +10,21 @@ import net.Client.ConnectionState;
 #end
 
 class Server {
-	var socket : UdpSocket;
+	var serializer = new hxbit.Serializer();
 	var clients : Array<Client>;
-	var maxClients = 20;
 	var host : Host;
 	var port : Int;
-	var serializer : hxbit.Serializer;
+	var socket : UdpSocket;
+	var maxClients = 20;
 
 	public function new() {
-		serializer = new hxbit.Serializer();
-		socket = new UdpSocket();
-		socket.setBlocking(false);
 		clients = new Array<Client>();
 		host = new Host('localhost');
 		port = 9090;
-		trace('starting server at '+'localhost:'+9090);
+		socket = new UdpSocket();
+		socket.setBlocking(false);
 		socket.bind(host, port);
+		trace('starting server at '+'localhost:'+9090);
 		Threads.spawn(listen);
 	}
 
