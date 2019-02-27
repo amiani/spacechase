@@ -64,7 +64,7 @@ class Spacechase {
     background = new Background(Assets.images.goldstartile, width, height);
     var playerStartPos = new B2Vec2(250,250);
     screen = new Screen(playerStartPos, width, height);
-    playerShip = new Player(playerStartPos, scene, world);
+    //playerShip = new Player(playerStartPos, scene, world);
     track = new Track(Assets.images.biglooptest, new B2Vec2(250, 250), trackLayer);
     asteroid = new Asteroid(new B2Vec2(260, 250), scene, world); 
     gate = new Gate(new B2Vec2(270, 250), scene, world);
@@ -73,7 +73,14 @@ class Spacechase {
     #if net_client
     var socket = new UdpSocket();
     socket.setBlocking(false);
-    client = new net.Client(socket, new Host('localhost'), 9090);
+    var args = Sys.args();
+    var host = new Host('localhost');
+    var port = 9090;
+    if (args.length == 2) {
+      host = new Host(args[0]);
+      port = Std.parseInt(args[1]);
+    }
+    client = new net.Client(socket, host, port);
     client.connect();
     #end
     #end
