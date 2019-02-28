@@ -27,11 +27,11 @@ class Body extends Node {
 
   override function initPhysicalVariables() {}
 
-  override public function update(dt : Float, worldToScreen : B2Vec2 -> Array<Float>) {
+  override public function update(dt : Float) {
     for (c in components) {
-      c.update(this, worldToScreen);
+      c.update(this);
     }
-    super.update(dt, worldToScreen);
+    super.update(dt);
   }
 
   override function get_position() {

@@ -10,10 +10,10 @@ class Scene extends Node {
 		nodes = new Map<Int, Node>();
 	}
 	
-  override public function update(dt:Float, worldToScreen:B2Vec2->Array<Float>) {
+  override public function update(dt:Float) {
 		maxNodes = new Array<Node>();
     for (child in children) {
-      child.update(dt, worldToScreen);
+      child.update(dt);
     }
   }
 

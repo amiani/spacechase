@@ -13,8 +13,6 @@ class Node implements Serializable {
   @:isVar public var linearVelocity(get, set) : B2Vec2;
   @:s @:isVar public var angularVelocity(get, set) : Float;
   @:s @:isVar public var angle(get, set) : Float;
-  public var x : Float;
-  public var y : Float;
 
   public var priority(default, null) : Int;
   public var accumulatedPriority(default, null) : Int;
@@ -46,20 +44,17 @@ class Node implements Serializable {
     return parent = node;
   }
 
-  public function update(dt:Float, worldToScreen:B2Vec2->Array<Float>) {
-    var screenPosition = worldToScreen(position);
-    x = screenPosition[0];
-    y = screenPosition[1];
+  public function update(dt:Float) {
     for (child in children) {
-      child.update(dt, worldToScreen);
+      child.update(dt);
     }
     accumulatedPriority += priority;
     Spacechase.activeScene.maxNodes.push(this);
   }
 
-  public function draw(g:Graphics) {
+  public function draw(g:Graphics, worldToScreen:B2Vec2->Vec2) {
     for (child in children) {
-      child.draw(g);
+      child.draw(g, worldToScreen);
     }
   }
   

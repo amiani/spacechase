@@ -80,7 +80,7 @@ class Player extends Body {
     }
   }
 
-  override public function update(dt: Float, worldToScreen : B2Vec2 -> Array<Float>) {
+  override public function update(dt: Float) {
     function velToForce(v : Float) return (-100/(v+1.5))+110;
     function velToForceTrack(v : Float) return (-500/((v/7)+1))+570;
     var forceFunc = velToForce;
@@ -107,10 +107,9 @@ class Player extends Body {
       impulse.multiply(maxLateralImpulse/impulse.length());
     }
     b2body.applyImpulse(impulse, massCenter);
-    sprite.x = x;
-    sprite.y = y;
+    sprite.position = position;
     sprite.angle = -angle;
 
-    super.update(dt, worldToScreen);
+    super.update(dt);
   }
 }

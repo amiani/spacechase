@@ -16,13 +16,9 @@ class Track extends Node {
     sprite = new Sprite(image, image.width, image.height, 0, 0, 3.5, this);
   }
 
-  override public function update(dt : Float, worldToScreen : B2Vec2 -> Array<Float>) {
-    var screenPos = worldToScreen(position);
-    x = screenPos[0];
-    y = screenPos[1];
-    sprite.x = x;
-    sprite.y = y;
-    super.update(dt, worldToScreen);
+  override public function update(dt : Float) {
+    sprite.position = position;
+    super.update(dt);
   }
 
 /*

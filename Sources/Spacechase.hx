@@ -92,7 +92,7 @@ class Spacechase {
     var stateUpdate = client.updateBuffer.pop();
     if (stateUpdate != null) scene.applyStateUpdate(stateUpdate);
     #end
-    scene.update(TIMESTEP, worldToScreen);
+    scene.update(TIMESTEP);
     screen.update(TIMESTEP, playerShip.position, playerShip.linearVelocity);
 
     world.step(TIMESTEP, 8, 3);
@@ -103,7 +103,7 @@ class Spacechase {
       checkTime += .5;
     }
     */
-    track.update(TIMESTEP, worldToScreen);
+    track.update(TIMESTEP);
 
     #if net_server
     server.sendState(scene.getStateUpdate(frame));
@@ -121,14 +121,14 @@ class Spacechase {
     var g = frameBuffer.g2;
     g.begin();
     background.draw(g, width, height, worldToScreen);
-    scene.draw(g);
+    scene.draw(g, worldToScreen);
     g.end();
 	}
 
-  inline function worldToScreen(position : B2Vec2) {
-    return [
-      (width / 2) - (screen.position.x - position.x)*64,
-      (height / 2) - (position.y - screen.position.y)*64
-    ];
+  inline function worldToScreen(position : B2Vec2):Vec2 {
+    return {
+      x: (width / 2) - (screen.position.x - position.x)*64,
+      y: (height / 2) - (position.y - screen.position.y)*64
+    };
   }
 }

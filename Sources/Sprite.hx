@@ -1,6 +1,7 @@
 import kha.Image;
 import kha.math.FastMatrix3;
 import kha.graphics2.Graphics;
+import box2D.common.math.B2Vec2;
 
 class Sprite extends Node {
   public var image(default, null) : Image;
@@ -23,25 +24,25 @@ class Sprite extends Node {
     this.scale = scale;
   }
 
-  override public function update(dt, worldToScreen) {
-    super.update(dt, worldToScreen);
+  override public function update(dt) {
+    super.update(dt);
   }
 
-	override public function draw(g: Graphics): Void {
+	override public function draw(g: Graphics, worldToScreen:B2Vec2->Vec2): Void {
 		if (image != null && visible) {
+      var screenPosition = worldToScreen(position);
 			if (angle != 0) 
         g.pushTransformation(g.transformation
-          .multmat(FastMatrix3.translation(x + originX, y + originY))
+          .multmat(FastMatrix3.translation(screenPosition.x + originX, screenPosition.y + originY))
           .multmat(FastMatrix3.rotation(angle))
-          .multmat(FastMatrix3.translation(-x - originX, -y - originY))
+          .multmat(FastMatrix3.translation(-screenPosition.x - originX, -screenPosition.y - originY))
         );
       g.color = 0xffffffff;
-      //g.drawSubImage(image, x, y, sx, sy, width, height);
-      g.drawScaledSubImage(image, sx, sy, width, height, x, y, width*scale, height*scale);
+      g.drawScaledSubImage(image, sx, sy, width, height, screenPosition.x, screenPosition.y, width*scale, height*scale);
 			if (angle != 0)
         g.popTransformation();
 			//g.drawScaledSubImage(image, Std.int(animation.get() * w) % image.width, Math.floor(animation.get() * w / image.width) * h, w, h, Math.round(x - collider.x * scaleX), Math.round(y - collider.y * scaleY), width, height);
 		}
-    super.draw(g);
+    super.draw(g, worldToScreen);
   }
 }
