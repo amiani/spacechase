@@ -66,7 +66,11 @@ class Spacechase {
     playerShip = new Player(playerStartPos, scene, world);
     screen = new Screen(playerStartPos, width, height);
     track = new Track(Assets.images.biglooptest, new B2Vec2(250, 250), trackLayer);
-    asteroid = new Asteroid(new B2Vec2(260, 250), scene, world); 
+    asteroid = new Asteroid(new B2Vec2(260, 251), scene, world); 
+    asteroid = new Asteroid(new B2Vec2(260, 252), scene, world); 
+    asteroid = new Asteroid(new B2Vec2(260, 253), scene, world); 
+    asteroid = new Asteroid(new B2Vec2(261, 250), scene, world); 
+    asteroid = new Asteroid(new B2Vec2(262, 250), scene, world); 
     gate = new Gate(new B2Vec2(270, 250), scene, world);
 
     #if !js
