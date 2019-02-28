@@ -24,8 +24,8 @@ class Player extends Body {
     super(position, parent, world, DYNAMIC_BODY);
     
     sprite = new Sprite(Assets.images.spaceships60, 64, 64, 512, 1056, this);
-    sprite.originX = 32;
-    sprite.originY = 32;
+    sprite.origin.x = 32;
+    sprite.origin.y = 32;
 
     var shape = new B2PolygonShape();
     shape.setAsBox(.5, .5);

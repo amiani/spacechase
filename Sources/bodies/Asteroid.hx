@@ -19,8 +19,8 @@ class Asteroid extends Body {
       var width = 33;
       var height = 33;
       sprite = new Sprite(Assets.images.asteroids, width, height, 67, 16, this);
-      sprite.originX = Std.int(width/2);
-      sprite.originY = Std.int(height/2);
+      sprite.origin.x = Std.int(width/2);
+      sprite.origin.y = Std.int(height/2);
       children.push(sprite);
 
       var shape = new B2CircleShape((33/2)/64);
