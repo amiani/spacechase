@@ -4,24 +4,23 @@ import kha.input.KeyCode;
 import kha.input.Keyboard;
 
 class KeyboardMouse extends Controller {
-  var keyboard : Keyboard;
-
 	public function new() {
+    super();
     if (Keyboard.get() != null) Keyboard.get().notify(onKeyDown, onKeyUp);
 	}
 	
   function onKeyDown(key:KeyCode) {
     switch key {
       case KeyCode.W:
-        gasDown = true;
+        input.up = true;
       case KeyCode.A:
-        leftDown = true;
+        input.left = true;
       case KeyCode.S:
-        brakeDown = true;
+        input.down = true;
       case KeyCode.D:
-        rightDown = true;
+        input.right = true;
       case KeyCode.Shift:
-        boostDown = true;
+        input.boost = true;
       default:
         null;
     }
@@ -30,15 +29,15 @@ class KeyboardMouse extends Controller {
   function onKeyUp(key:KeyCode) {
     switch key {
       case KeyCode.W:
-        gasDown = false;
+        input.up = false;
       case KeyCode.A:
-        leftDown = false;
+        input.left = false;
       case KeyCode.S:
-        brakeDown = false;
+        input.down = false;
       case KeyCode.D:
-        rightDown = false;
+        input.right = false;
       case KeyCode.Shift:
-        boostDown = false;
+        input.boost = false;
       default:
         null;
     }
