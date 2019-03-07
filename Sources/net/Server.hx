@@ -19,12 +19,12 @@ class Server {
 
 	public function new() {
 		clients = new Array<Client>();
-		host = new Host('192.168.0.102');
+		host = new Host('192.168.0.101');
 		port = 9090;
 		socket = new UdpSocket();
 		socket.setBlocking(false);
 		socket.bind(host, port);
-		trace('starting server at '+'192.168.0.102'+9090);
+		trace('starting server at '+'192.168.0.101:'+9090);
 		Threads.spawn(listen);
 	}
 

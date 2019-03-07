@@ -93,8 +93,15 @@ class Spacechase {
   
 	public function update(): Void {
     #if (!js && net_client)
-    var stateUpdate = client.updateBuffer.pop();
-    if (stateUpdate != null) scene.applyStateUpdate(stateUpdate);
+    if (client.updateBuffer.length > 0) {
+      if (client.updateBuffer.length > 1) trace(client.updateBuffer.length);
+      var stateUpdate = client.updateBuffer.pop();
+      while (client.updateBuffer.length > 4) {
+        stateUpdate = client.updateBuffer.pop();
+      }
+      scene.applyStateUpdate(stateUpdate);
+      frame = stateUpdate.frame;
+    }
     #end
     scene.update(TIMESTEP);
     screen.update(TIMESTEP, playerShip.position, playerShip.linearVelocity);
