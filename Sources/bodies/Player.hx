@@ -1,8 +1,6 @@
 package bodies;
 
-import kha.input.KeyCode;
 import kha.Assets;
-import kha.input.Keyboard;
 import box2D.collision.shapes.B2MassData;
 import box2D.dynamics.B2FixtureDef;
 import box2D.collision.shapes.B2PolygonShape;
@@ -12,7 +10,6 @@ import box2D.common.math.B2Vec2;
 class Player extends Body {
   public var sprite : Sprite;
   //public var onTrack(default, null) : Bool;
-  var keyboard : Keyboard;
   var gasDown = false;
   var boostDown = false;
   var brakeDown = false;
@@ -43,41 +40,6 @@ class Player extends Body {
     components.push(new components.TrailComponent(0xee855e01, new B2Vec2(-.14, -.5), parent));
     components.push(new components.TrailComponent(0xee855e01, new B2Vec2(.14, -.5), parent));
     */
-    if (Keyboard.get() != null) Keyboard.get().notify(onKeyDown, onKeyUp);
-  }
-
-  function onKeyDown(key:KeyCode) {
-    switch key {
-      case KeyCode.W:
-        gasDown = true;
-      case KeyCode.A:
-        leftDown = true;
-      case KeyCode.S:
-        brakeDown = true;
-      case KeyCode.D:
-        rightDown = true;
-      case KeyCode.Shift:
-        boostDown = true;
-      default:
-        null;
-    }
-  }
-
-  function onKeyUp(key:KeyCode) {
-    switch key {
-      case KeyCode.W:
-        gasDown = false;
-      case KeyCode.A:
-        leftDown = false;
-      case KeyCode.S:
-        brakeDown = false;
-      case KeyCode.D:
-        rightDown = false;
-      case KeyCode.Shift:
-        boostDown = false;
-      default:
-        null;
-    }
   }
 
   override public function update(dt: Float) {
