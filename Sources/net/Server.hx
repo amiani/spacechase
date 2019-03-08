@@ -8,6 +8,8 @@ import hx.concurrent.thread.Threads;
 import haxe.io.Bytes;
 import net.Client.ConnectionState;
 #end
+import control.Controller;
+import control.KeyboardMouse;
 
 class Server {
 	var serializer = new hxbit.Serializer();
@@ -19,12 +21,12 @@ class Server {
 
 	public function new() {
 		clients = new Array<Client>();
-		host = new Host('192.168.0.101');
+		host = new Host('192.168.0.102');
 		port = 9090;
 		socket = new UdpSocket();
 		socket.setBlocking(false);
 		socket.bind(host, port);
-		trace('starting server at '+'192.168.0.101:'+9090);
+		trace('starting server at '+'192.168.0.102:'+9090);
 		Threads.spawn(listen);
 	}
 
@@ -38,6 +40,8 @@ class Server {
 				case Client.CONNECT:
 					handleConnect(senderAddress);
 				case Client.INPUT:
+					trace(len);
+					handleInput(data.sub(1, len-1), senderAddress);
 				case Client.MSG:
 					trace(data.getString(1, 5));
 			}
@@ -51,6 +55,7 @@ class Server {
 			var client = clients[index];
 			var b = Bytes.alloc(1);
 			b.set(0, Client.ACCEPTED);
+			b.set(1, Spacechase.frame);
 			client.send(b);
 		} else if (clients.length >= maxClients) {
 			var b = Bytes.alloc(1);
@@ -61,9 +66,16 @@ class Server {
 			clients.push(client);
 			var b = Bytes.alloc(1);
 			b.set(0, Client.ACCEPTED);
+			b.set(1, Spacechase.frame);
 			client.send(b);
 			trace('new client connected: '+address.getHost().host+':'+address.port);
 		}
+	}
+
+	function handleInput(data:Bytes, address:Address) {
+		var client = findClient(address);
+		var inputs = serializer.unserialize(data, InputArray).inputs;
+		client.addInputs(inputs);
 	}
 
 	function isClientConnected(address) {
@@ -84,10 +96,17 @@ class Server {
 		return -1;
 	}
 
+	function findClient(address:Address) {
+		for (client in clients) {
+			if (client.address.compare(address) == 0 && client.connectionState == Connected)
+				return client;
+		}
+		return null;
+	}
+
 	public function sendState(stateUpdate:StateUpdate) {
-		var b = serializer.serialize(stateUpdate);
 		for (c in clients) {
-			c.sendState(b);
+			c.sendState(stateUpdate);
 		}
 	}
 

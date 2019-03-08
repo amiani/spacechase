@@ -81,20 +81,6 @@ private class RingBufferImpl<V> {
         });
     }
 
-    public function insert(index:Int, item:V) {
-        _sync.execute(()-> {
-            if (index < 0 || index > bufferMaxIdx)
-                throw '[index] $index is out of bound';
-
-            var realIdx = bufferStartIdx + index;
-            if (realIdx > bufferMaxIdx) {
-                realIdx -= length;
-            }
-            buffer[realIdx] = item;
-        });
-    }
-
-
     public function get(index:Int):V {
         return _sync.execute(() -> {
             if (index < 0 || index > bufferMaxIdx)

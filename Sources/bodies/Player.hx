@@ -15,10 +15,12 @@ class Player extends Body {
   var brakeDown = false;
   var leftDown = false;
   var rightDown = false;
+  var controller : control.Controller;
   var maxLateralImpulse = 1.;
   
-  override public function new(position, parent, world) {
+  override public function new(position, parent, world, controller) {
     super(position, parent, world, DYNAMIC_BODY);
+    this.controller = controller;
     
     sprite = new Sprite(Assets.images.spaceships60, 64, 64, 512, 1056, this);
     sprite.origin.x = 32;
@@ -46,18 +48,18 @@ class Player extends Body {
     function velToForce(v : Float) return (-100/(v+1.5))+110;
     function velToForceTrack(v : Float) return (-500/((v/7)+1))+570;
     var forceFunc = velToForce;
-    if (boostDown) forceFunc = velToForceTrack;
+    if (controller.input.boost) forceFunc = velToForceTrack;
     var massCenter = b2body.getWorldCenter();
     var velocity = b2body.getWorldVector(new B2Vec2(0,1));
-    if (gasDown || boostDown) {
+    if (controller.input.up || controller.input.boost) {
       velocity.multiply(forceFunc(b2body.getLinearVelocity().length()));
-    } else if (brakeDown) {
+    } else if (controller.input.down) {
       velocity.multiply(-forceFunc(b2body.getLinearVelocity().length()));
     }
     b2body.applyForce(velocity, massCenter);
-    if (leftDown) {
+    if (controller.input.left) {
       b2body.applyTorque(40);
-    } else if (rightDown) {
+    } else if (controller.input.right) {
       b2body.applyTorque(-40);
     }
 

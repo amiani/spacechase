@@ -1,5 +1,6 @@
 package;
 
+import control.Controller;
 import kha.Assets;
 import kha.Framebuffer;
 import kha.input.Keyboard;
@@ -31,6 +32,7 @@ class Spacechase {
   var playerShip : Player;
   var asteroid : Asteroid;
   var background : Background;
+  var keyboardMouse : control.KeyboardMouse;
   var world : B2World;
   var track : tracks.Track;
   var gate : Gate;
@@ -51,7 +53,7 @@ class Spacechase {
 
   var scene : Scene;
   public static var activeScene(default, null) : Scene;
-  var frame = 0;
+  public static var frame(default, null) = 0;
 
   public function new(width:Int, height:Int) {
     scene = new Scene();
@@ -59,11 +61,12 @@ class Spacechase {
     this.width = width;
     this.height = height;
     trackLayer = new Node(scene);
+    keyboardMouse = new control.KeyboardMouse();
     world = new B2World(new B2Vec2(0, 0), true);
 
     background = new Background(Assets.images.goldstartile, width, height);
     var playerStartPos = new B2Vec2(250,250);
-    playerShip = new Player(playerStartPos, scene, world);
+    playerShip = new Player(playerStartPos, scene, world, keyboardMouse);
     screen = new Screen(playerStartPos, width, height);
     track = new Track(Assets.images.biglooptest, new B2Vec2(250, 250), trackLayer);
     asteroid = new Asteroid(new B2Vec2(260, 251), scene, world); 
@@ -78,7 +81,7 @@ class Spacechase {
     var socket = new UdpSocket();
     socket.setBlocking(false);
     var args = Sys.args();
-    var host = new Host('localhost');
+    var host = new Host('192.168.0.102');
     var port = 9090;
     if (args.length == 2) {
       host = new Host(args[0]);
@@ -94,15 +97,12 @@ class Spacechase {
 	public function update(): Void {
     #if (!js && net_client)
     if (client.updateBuffer.length > 0) {
-      if (client.updateBuffer.length > 1) trace(client.updateBuffer.length);
       var stateUpdate = client.updateBuffer.pop();
-      while (client.updateBuffer.length > 4) {
-        stateUpdate = client.updateBuffer.pop();
-      }
       scene.applyStateUpdate(stateUpdate);
-      frame = stateUpdate.frame;
     }
+    keyboardMouse.update(TIMESTEP, frame, client.lastConfirmedInputFrame);
     #end
+    
     scene.update(TIMESTEP);
     screen.update(TIMESTEP, playerShip.position, playerShip.linearVelocity);
 
@@ -116,8 +116,13 @@ class Spacechase {
     */
     track.update(TIMESTEP);
 
+    #if !js
+    #if net_client
+    client.sendInput(keyboardMouse.getInputArray());
+    #end
     #if net_server
     server.sendState(scene.getStateUpdate(frame));
+    #end
     #end
     frame++;
 	}
@@ -141,5 +146,9 @@ class Spacechase {
       x: (width / 2) - (screen.position.x - position.x)*64,
       y: (height / 2) - (position.y - screen.position.y)*64
     };
+  }
+
+  public static function resetFrame(thatframe:Int) {
+    frame = thatframe;
   }
 }

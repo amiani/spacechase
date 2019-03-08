@@ -12,15 +12,15 @@ class KeyboardMouse extends Controller {
   function onKeyDown(key:KeyCode) {
     switch key {
       case KeyCode.W:
-        input.up = true;
+        _input.up = true;
       case KeyCode.A:
-        input.left = true;
+        _input.left = true;
       case KeyCode.S:
-        input.down = true;
+        _input.down = true;
       case KeyCode.D:
-        input.right = true;
+        _input.right = true;
       case KeyCode.Shift:
-        input.boost = true;
+        _input.boost = true;
       default:
         null;
     }
@@ -29,18 +29,17 @@ class KeyboardMouse extends Controller {
   function onKeyUp(key:KeyCode) {
     switch key {
       case KeyCode.W:
-        input.up = false;
+        _input.up = false;
       case KeyCode.A:
-        input.left = false;
+        _input.left = false;
       case KeyCode.S:
-        input.down = false;
+        _input.down = false;
       case KeyCode.D:
-        input.right = false;
+        _input.right = false;
       case KeyCode.Shift:
-        input.boost = false;
+        _input.boost = false;
       default:
         null;
     }
   }
-
 }
