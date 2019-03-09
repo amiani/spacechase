@@ -19,13 +19,10 @@ class Mainserver {
 				accumulator += frameTime;
 
 				while (accumulator >= TIMESTEP) {
-					trace('about to update');
 					spacechase.update();
 					accumulator -= TIMESTEP;
 				}
 			}
-			// Avoid passing update/render directly,
-			// so replacing them via code injection works
 		});
 	}
 }
