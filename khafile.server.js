@@ -11,6 +11,6 @@ project.addLibrary('haxe-concurrent');
 //project.addLibrary('box2d-linc');
 
 //project.addParameter('-dce full');
-//project.addParameter('-main Mainserver.hx');
+project.addParameter('-main Mainserver.hx');
 project.addDefine('net_server');
 resolve(project);
