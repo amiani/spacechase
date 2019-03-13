@@ -18,8 +18,10 @@ class Server {
 	var port : Int;
 	var socket : UdpSocket;
 	var maxClients = 20;
+	var resetScene : Int -> Void;
 
-	public function new() {
+	public function new(resetScene) {
+		this.resetScene = resetScene;
 		clients = new Array<Client>();
 		host = new Host('0.0.0.0');
 		port = 9090;
@@ -62,8 +64,11 @@ class Server {
 			b.set(0, Client.DENIED);
 			socket.sendTo(b, 0, b.length, address);
 		} else {
-			var client = new Client(socket, address.getHost(), address.port, Connected);
+			var client = new Client(socket, address.getHost(), address.port, resetScene, Connected);
 			clients.push(client);
+			trace('here1');
+			resetScene(0);
+			trace('here2');
 			var b = Bytes.alloc(1);
 			b.set(0, Client.ACCEPTED);
 			b.set(1, Spacechase.frame);

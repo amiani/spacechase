@@ -40,13 +40,16 @@ class Client {
 	public var address(default, null) = new Address();
 	var remote = new Remote();
 	var connectTimer : haxe.Timer;
+	var lastHeardServer = -1.;
 	var serializer = new hxbit.Serializer();
+	var resetScene : Int -> Void;
 
-	public function new(socket:UdpSocket, host:Host, port:Int, ?connectionState:ConnectionState) {
+	public function new(socket:UdpSocket, host:Host, port:Int, resetScene:Int->Void, ?connectionState:ConnectionState) {
 		this.socket = socket;
 		this.host = host;
 		this.connectionState = connectionState == null ? Disconnected : connectionState;
 		this.updateBuffer = new Queue<StateUpdate>();
+		this.resetScene = resetScene;
 		address.host = host.ip;
 		address.port = port;
 	}
@@ -70,6 +73,7 @@ class Client {
 		var senderAddress = new Address();
 		while (true) {
 			socket.waitForRead();
+			lastHeardServer = haxe.Timer.stamp();
 			var len = socket.readFrom(data, 0, 2048, senderAddress);
 			var header = data.get(0);
 			var payload = data.sub(1, len-1);
@@ -90,8 +94,15 @@ class Client {
 		connectTimer.stop();
 		if (connectionState != Connected) {
 			trace('connected to server at: '+address.getHost().host+':'+address.port);
+			connectTimer = new haxe.Timer(5000);
+			connectTimer.run = () -> {
+				if (haxe.Timer.stamp() - this.lastHeardServer > 5) {
+					trace('disconnected from server');
+					connectionState = Disconnected;
+				}
+			}
 			connectionState = Connected;
-			Spacechase.resetFrame(data.get(0));
+			resetScene(data.get(0));
 		}
 	}
 	

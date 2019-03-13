@@ -2,13 +2,12 @@ import box2D.common.math.B2Vec2;
 import box2D.common.math.B2Math.dot;
 
 class Screen {
-  public var position(default, null) : B2Vec2;
+  public var position(default, null) = new B2Vec2(250, 250);
   private var hVec : B2Vec2;
   private var major : Float;
   private var minor : Float;
   
-  public function new(position : B2Vec2, screenWidth : Float, screenHeight : Float) {
-    this.position = position;
+  public function new(screenWidth : Float, screenHeight : Float) {
     this.hVec = new B2Vec2(1, 0);
     calcAxes(screenWidth, screenHeight);
   }
